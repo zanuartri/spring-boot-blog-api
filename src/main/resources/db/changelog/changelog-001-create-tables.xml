@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+       http://www.liquibase.org/xml/ns/dbchangelog
+       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="001-create-users-posts-comments" author="zanuar">
+        <!-- users -->
+        <createTable tableName="users">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(150)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- posts -->
+        <createTable tableName="posts">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="TEXT"/>
+            <column name="author_id" type="BIGINT"/>
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="posts"
+                                 baseColumnNames="author_id"
+                                 constraintName="fk_posts_author"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"
+                                 onDelete="SET NULL"/>
+
+        <!-- comments -->
+        <createTable tableName="comments">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="post_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="text" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="comments"
+                                 baseColumnNames="post_id"
+                                 constraintName="fk_comments_post"
+                                 referencedTableName="posts"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+
+        <!-- Indexes -->
+        <createIndex tableName="users" indexName="idx_users_email">
+            <column name="email"/>
+        </createIndex>
+
+        <createIndex tableName="posts" indexName="idx_posts_author">
+            <column name="author_id"/>
+        </createIndex>
+
+        <!-- sample seed data -->
+        <insert tableName="users">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="Alice"/>
+            <column name="email" value="alice@example.com"/>
+            <column name="created_at" valueDate="2025-01-01T00:00:00"/>
+        </insert>
+
+        <insert tableName="users">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="Bob"/>
+            <column name="email" value="bob@example.com"/>
+            <column name="created_at" valueDate="2025-01-02T00:00:00"/>
+        </insert>
+
+        <insert tableName="posts">
+            <column name="id" valueNumeric="1"/>
+            <column name="title" value="Welcome to the blog"/>
+            <column name="content" value="This is the first post."/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="created_at" valueDate="2025-01-03T00:00:00"/>
+        </insert>
+
+        <insert tableName="comments">
+            <column name="id" valueNumeric="1"/>
+            <column name="post_id" valueNumeric="1"/>
+            <column name="text" value="Nice post!"/>
+            <column name="created_at" valueDate="2025-01-04T00:00:00"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
