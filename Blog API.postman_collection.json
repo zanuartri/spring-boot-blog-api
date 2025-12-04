@@ -1,0 +1,202 @@
+{
+  "info": {
+    "name": "Blog API - Full (Posts, Users, Comments)",
+    "_postman_id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Full Postman collection for Blog API. Set environment variable {{base_url}} (default http://localhost:8080)."
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "createdPostId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "createdUserId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "createdCommentId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Posts",
+      "item": [
+        {
+          "name": "01 - List Posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{base_url}}/api/posts", "host": ["{{base_url}}"], "path": ["api","posts"] }
+          }
+        },
+        {
+          "name": "02 - Create Post",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"New Post from Postman\",\n  \"content\": \"This is a test post created by Postman.\",\n  \"authorId\": 1\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/posts", "host": ["{{base_url}}"], "path": ["api","posts"] }
+          }
+        },
+        {
+          "name": "03 - Get Post (by id)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{base_url}}/api/posts/{{createdPostId}}", "host": ["{{base_url}}"], "path": ["api","posts","{{createdPostId}}"] }
+          }
+        },
+        {
+          "name": "04 - Update Post",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"title\": \"Updated Title from Postman\",\n  \"content\": \"Updated content\",\n  \"authorId\": 1\n}" },
+            "url": { "raw": "{{base_url}}/api/posts/{{createdPostId}}", "host": ["{{base_url}}"], "path": ["api","posts","{{createdPostId}}"] }
+          }
+        },
+        {
+          "name": "05 - Delete Post",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{base_url}}/api/posts/{{createdPostId}}", "host": ["{{base_url}}"], "path": ["api","posts","{{createdPostId}}"] }
+          }
+        },
+        {
+          "name": "06 - Validation test (create blank title)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"title\": \"\",\n  \"content\": \"Missing title\",\n  \"authorId\": 1\n}" },
+            "url": { "raw": "{{base_url}}/api/posts", "host": ["{{base_url}}"], "path": ["api","posts"] }
+          }
+        },
+        {
+          "name": "07 - Get non-existing post (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{base_url}}/api/posts/999999", "host": ["{{base_url}}"], "path": ["api","posts","999999"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "U01 - List Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{base_url}}/api/users", "host": ["{{base_url}}"], "path": ["api","users"] }
+          }
+        },
+        {
+          "name": "U02 - Create User",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Charlie\",\n  \"email\": \"charlie+{{$timestamp}}@example.com\"\n}" },
+            "url": { "raw": "{{base_url}}/api/users", "host": ["{{base_url}}"], "path": ["api","users"] }
+          }
+        },
+        {
+          "name": "U03 - Get User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{base_url}}/api/users/{{createdUserId}}", "host": ["{{base_url}}"], "path": ["api","users","{{createdUserId}}"] }
+          }
+        },
+        {
+          "name": "U04 - Update User",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Charlie Updated\",\n  \"email\": \"charlie.updated+{{$timestamp}}@example.com\"\n}" },
+            "url": { "raw": "{{base_url}}/api/users/{{createdUserId}}", "host": ["{{base_url}}"], "path": ["api","users","{{createdUserId}}"] }
+          }
+        },
+        {
+          "name": "U05 - Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{base_url}}/api/users/{{createdUserId}}", "host": ["{{base_url}}"], "path": ["api","users","{{createdUserId}}"] }
+          }
+        },
+        {
+          "name": "U06 - Validation create user (missing email)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"No Email\"\n}" },
+            "url": { "raw": "{{base_url}}/api/users", "host": ["{{base_url}}"], "path": ["api","users"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Comments",
+      "item": [
+        {
+          "name": "C01 - Create Comment (for a post)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"postId\": {{createdPostId}},\n  \"text\": \"Nice post! Created by Postman\"\n}" },
+            "url": { "raw": "{{base_url}}/api/comments", "host": ["{{base_url}}"], "path": ["api","comments"] }
+          }
+        },
+        {
+          "name": "C02 - Get Comment by Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{base_url}}/api/comments/{{createdCommentId}}", "host": ["{{base_url}}"], "path": ["api","comments","{{createdCommentId}}"] }
+          }
+        },
+        {
+          "name": "C03 - List Comments for a Post",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{base_url}}/api/posts/{{createdPostId}}/comments", "host": ["{{base_url}}"], "path": ["api","posts","{{createdPostId}}","comments"] }
+          }
+        },
+        {
+          "name": "C04 - Delete Comment",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{base_url}}/api/comments/{{createdCommentId}}", "host": ["{{base_url}}"], "path": ["api","comments","{{createdCommentId}}"] }
+          }
+        },
+        {
+          "name": "C05 - Validation create comment (no text)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"postId\": {{createdPostId}},\n  \"text\": \"\"\n}" },
+            "url": { "raw": "{{base_url}}/api/comments", "host": ["{{base_url}}"], "path": ["api","comments"] }
+          }
+        }
+      ]
+    }
+  ]
+}
